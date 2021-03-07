@@ -1,0 +1,176 @@
+
+<html>
+   <head>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">                                                          
+    </head>
+    <body>
+      <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>Channel 1 ECG</h3>
+                    </div>
+                    <div class="panel-body">
+                      <canvas id="line-chart1" ></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>Channel 2 ECG</h3>
+                    </div>
+                    <canvas id="line-chart2"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3>Temprature</h3>
+                        </div>
+                        <div class="panel-body">
+                          <canvas id="line-chart3" ></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3>pulse meter</h3>
+                        </div>
+                        <canvas id="line-chart4"></canvas>
+                        </div>
+                    </div>
+                </div>
+        </div>
+      
+    </div>
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script>
+            var ch1=[],ch2=[],time=[],temp=[],pulse=[]
+            $(document).ready(function(){
+  $.ajax({
+    url: "http://3.129.38.208/",
+    method: "GET",
+    dataType: 'json',
+          cors: true ,
+          contentType:'application/json',
+         
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+          },
+    success: function(data) {
+      console.log(typeof(data));
+      for(var i in data) {
+        ch1.push( parseInt(data[i].ch1));
+        ch2.push( parseInt(data[i].ch2));
+        temp.push( parseInt(data[i].temp));
+        pulse.push( parseInt(data[i].pulse))
+        time.push(data[i].time)
+
+       
+		
+      }
+    
+      
+      new Chart(document.getElementById("line-chart1"), {
+    type: 'line',
+    data: {
+     labels: time,
+      datasets: [{ 
+    data:ch1,
+    borderColor: 'red',
+    
+    backgroundColor:'black'
+    }
+    ]
+    },
+     options: {
+    title: {
+    display: true,
+    text: 'channel 1 data'
+        } 
+              }
+          })
+          
+      
+      new Chart(document.getElementById("line-chart2"), {
+        type: 'line',
+    data: {
+     labels: time,
+     lineTension:0.5,
+      datasets: [{ 
+    data:ch1,
+    borderColor: 'red',
+    
+    backgroundColor:'black'
+    }
+    ]
+    },
+     options: {
+    title: {
+    display: true,
+    text: 'channel 1 data'
+        } 
+              }
+          })
+          new Chart(document.getElementById("line-chart3"), {
+    type: 'line',
+    data: {
+     labels: time,
+     lineTension:1,
+     borderJoinStyle:'miter',
+      datasets: [{ 
+    data:temp,
+    borderColor: 'blue',
+    
+    backgroundColor:'sky-blue'
+    }
+    ]
+    },
+     options: {
+    title: {
+    display: true,
+    text: 'Temprature'
+        } 
+              }
+          })
+          new Chart(document.getElementById("line-chart4"), {
+    type: 'line',
+    data: {
+     labels: time,
+      datasets: [{ 
+    data:pulse,
+    borderColor: 'blue',
+    
+    backgroundColor:'sky-blue'
+    }
+    ]
+    },
+     options: {
+    title: {
+    display: true,
+    text: 'Pulse'
+        } 
+              }
+          })
+
+    }
+})})
+    
+    </script>
+     </body>
+     </html> 
